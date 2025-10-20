@@ -1,5 +1,5 @@
-#ifndef INVENTARIO_H
-#define INVENTARIO_H
+#ifndef FREEFIRE_H
+#define FREEFIRE_H
 
 // Bibliotecas necessárias (incluídas aqui para serem usadas em FreeFire.c e utils.c)
 #include <stdio.h>
@@ -8,13 +8,17 @@
 #include <stdbool.h>
 
 // -----------------------------------------------------------------------------
-// 1. Definição da Constante
+// Definição da Constante
 // -----------------------------------------------------------------------------
 #define CAPACIDADE_MAXIMA 10
-extern int numItens;
+extern int estruturaAtual;
+extern int numItensVetor;
+extern int numItensLista;
+extern struct No* cabecaLista;
+extern long long int contComparacoes;
 
 // -----------------------------------------------------------------------------
-// 2. Definição de Enum
+// Definição de Enum
 // -----------------------------------------------------------------------------
 typedef enum {
     TIPO_INVALIDO = 0,
@@ -27,7 +31,7 @@ typedef enum {
 } TipoItem;
 
 // -----------------------------------------------------------------------------
-// 3. Definição da Struct (Estrutura de Dados Composta)
+// Definição da Struct (Estrutura de Dados Composta)
 // -----------------------------------------------------------------------------
 typedef struct {
     char nome[30];
@@ -35,12 +39,25 @@ typedef struct {
     int quantidade;
 } Item;
 
+typedef struct No {
+    Item dados;
+    struct No* proximo;
+} No;
+
 // -----------------------------------------------------------------------------
-// 4. Protótipos das Funções Públicas (Interface do Módulo)
+// Protótipos das Funções
 // -----------------------------------------------------------------------------
+
+// Funções utilitárias (no utils.c)
+void exibirMenuOperacoes(const char* nome_estrutura);
+void exibirDadosItem(const Item *item, int nro);
+void exibirDetalhesItem(const Item *item);
 void inserirItem();
 void removerItem();
 void listarItens();
+void ordenarItens();
+Item* buscarItem(const char *nomeBusca, bool buscaBinaria);
+
 const char* tipoItemToString(TipoItem tipo);
 
 #endif
