@@ -42,13 +42,17 @@ int main() {
                     switch (opcao_operacao) {
                         case 1: inserirItem(); break;
                         case 2: removerItem(); break;
-                        case 3: listarItens(); break;
+                        case 3: mostrarComponentes(); break;
                         case 4:
                             // Opção 4 é Busca Sequencial na LISTA, OU Ordenar/Buscar no VETOR
                             if (estruturaAtual == 1) {
                                 // 4. Ordenar os itens por critério (nome, tipo, prioridade)
-                                // chama a função de ordenar
-                                ordenarItens();
+                                if (numItensVetor <= 1) {
+                                    printf("\n[ALERTA] É necessário ter pelo menos 2 itens para ordenar.\n");
+                                    break;
+                                }
+                                // chama o menu de ordenar
+                                menuDeOrdenacao();
                             } else {
                                 char nomeBusca[30];
                                 Item* itemEncontrado = NULL;
@@ -59,12 +63,10 @@ int main() {
                                 }
                                 while (getchar() != '\n');
                                 if (itemEncontrado != NULL) {
-                                    printf("------------------------------------------\n");
                                     printf("\n[SUCESSO] Item '%s' encontrado.\n", nomeBusca);
                                     exibirDetalhesItem(itemEncontrado);
                                     printf("------------------------------------------\n");
                                 } else {
-                                    printf("------------------------------------------\n");
                                     printf("\n[ALERTA] Item '%s' NÃO encontrado na mochila.\n", nomeBusca);
                                     printf("------------------------------------------\n");
                                 }
@@ -77,13 +79,22 @@ int main() {
                                 printf("\n[ERRO] Opção inválida. Escolha uma opção de 0 - 4\n");
                                 break;
                             }
+                            if (!verificarOrdenacao()) {
+                                printf("\n[ALERTA] A busca binária requer que a mochila esteja ordenada por NOME.\n");
+                                printf("Use a opção [4] para organizar a mochila primeiro.\n");
+                                pressioneEnter();
+                                limparTela();
+                                break;
+                            }
                             char nomeBusca[30];
                             Item* itemEncontrado = NULL;
                             // faz a busca do Item
-                            bool tipoBusca = (opcao_operacao == 6);
+                            // removido pois não existe mais a busca sequencial em vetor
+                            // bool tipoBusca = (opcao_operacao == 6);
+                            bool tipoBusca = true;
                             const char *mensagem = tipoBusca
-                                ? "Digite o Nome para buscar (Binária - exige ordenação): "
-                                : "Digite o Nome para buscar (Sequencial): ";
+                                ? "Nome do componente a buscar (Binária - exige ordenação): "
+                                : "Nome do componente a buscar (Sequencial): ";
                             printf("%s", mensagem);
 
                             if (scanf("%29s", nomeBusca) == 1) {
@@ -91,17 +102,11 @@ int main() {
                             }
                             while (getchar() != '\n');
 
-                            // Exibir métrica
-                            // const char* tipo = tipoBusca ? "Binária" : "Sequencial";
-                            // printf("\n[Busca %s] Comparações realizadas: %lld\n", tipo, contComparacoes);
-
                             if (itemEncontrado != NULL) {
-                                printf("------------------------------------------\n");
                                 printf("\n[SUCESSO] Item '%s' encontrado.\n", nomeBusca);
                                 exibirDetalhesItem(itemEncontrado);
                                 printf("------------------------------------------\n");
                             } else {
-                                printf("------------------------------------------\n");
                                 printf("\n[ALERTA] Item '%s' NÃO encontrado na mochila.\n", nomeBusca);
                                 printf("------------------------------------------\n");
                             }

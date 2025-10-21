@@ -6,11 +6,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 // -----------------------------------------------------------------------------
 // Definição da Constante
 // -----------------------------------------------------------------------------
 #define CAPACIDADE_MAXIMA 10
+#define TAMANHO_NOME 30
 extern int estruturaAtual;
 extern int numItensVetor;
 extern int numItensLista;
@@ -22,13 +24,19 @@ extern long long int contComparacoes;
 // -----------------------------------------------------------------------------
 typedef enum {
     TIPO_INVALIDO = 0,
-    TIPO_ARMA,
-    TIPO_MUNICAO,
-    TIPO_CURA,
-    TIPO_FERRAMENTA,
-    TIPO_PROTECAO,
+    TIPO_ESTRUTURAL,
+    TIPO_ELETRONICO,
+    TIPO_ENERGIA,
+    TIPO_SUPORTE,
+    TIPO_CONTROLE,
     TOTAL_TIPOS
 } TipoItem;
+
+typedef enum {
+    CRITERIO_NOME,
+    CRITERIO_TIPO,
+    CRITERIO_PRIORIDADE
+} CriterioOrdenacao;
 
 // -----------------------------------------------------------------------------
 // Definição da Struct (Estrutura de Dados Composta)
@@ -37,6 +45,7 @@ typedef struct {
     char nome[30];
     TipoItem tipo;
     int quantidade;
+    int prioridade;
 } Item;
 
 typedef struct No {
@@ -54,10 +63,20 @@ void exibirDadosItem(const Item *item, int nro);
 void exibirDetalhesItem(const Item *item);
 void inserirItem();
 void removerItem();
-void listarItens();
-void ordenarItens();
+void mostrarComponentes();
+void ordenarItens(CriterioOrdenacao criterio);
+bool verificarOrdenacao();
 Item* buscarItem(const char *nomeBusca, bool buscaBinaria);
+void pressioneEnter();
+void menuDeOrdenacao();
+int buscaBinariaPorNome(Item mochila[], const char *nomeBusca);
+void medirTempo(clock_t inicio, clock_t fim, long long comparacoes);
+void bubbleSortNome(Item mochila[], int tamanho);
+void insertionSortTipo(Item mochila[], int tamanho);
+void selectionSortPrioridade(Item mochila[], int tamanho);
+void limparTela();
 
 const char* tipoItemToString(TipoItem tipo);
+const char* criterioToString(CriterioOrdenacao criterio);
 
 #endif
